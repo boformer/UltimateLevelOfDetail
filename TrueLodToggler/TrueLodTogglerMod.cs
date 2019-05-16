@@ -228,10 +228,24 @@ namespace TrueLodToggler
     {
         public static void Postfix(PropInfo __instance)
         {
-            var lodTogglerFactor = TrueLodTogglerMod.ActiveConfig.PropLodDistance / 1000f;
+            if (__instance.m_material != null && __instance.m_material.shader.name == "Custom/Props/Decal/Blend")
+            {
+                // Decals
+                var renderDistance = TrueLodTogglerMod.ActiveConfig.DecalPropFadeDistance;
 
-            __instance.m_lodRenderDistance *= lodTogglerFactor;
-            __instance.m_maxRenderDistance *= lodTogglerFactor;
+                __instance.m_lodRenderDistance = renderDistance;
+                __instance.m_maxRenderDistance = renderDistance;
+
+                var fadeDistanceFactor = 1f / (renderDistance * renderDistance) * 2.6f;
+                __instance.m_material.SetFloat("_FadeDistanceFactor", fadeDistanceFactor);
+            }
+            else
+            {
+                // Normal props
+                var lodTogglerFactor = TrueLodTogglerMod.ActiveConfig.PropLodDistance / 1000f;
+                __instance.m_lodRenderDistance *= lodTogglerFactor;
+                __instance.m_maxRenderDistance *= lodTogglerFactor;
+            }
         }
     }
 
@@ -255,9 +269,26 @@ namespace TrueLodToggler
 
         public static void Postfix(PropInfo __instance)
         {
-            var lodTogglerFactor = TrueLodTogglerMod.ActiveConfig.PropLodDistance / 1000f;
-            __instance.m_lodRenderDistance *= lodTogglerFactor;
-            __instance.m_maxRenderDistance *= lodTogglerFactor;
+
+            if (__instance.m_material != null && __instance.m_material.shader.name == "Custom/Props/Decal/Blend")
+            {
+                // Decals
+                var renderDistance = TrueLodTogglerMod.ActiveConfig.DecalPropFadeDistance;
+
+                __instance.m_lodRenderDistance = renderDistance;
+                __instance.m_maxRenderDistance = renderDistance;
+
+                var fadeDistanceFactor = 1f / (renderDistance * renderDistance) * 2.6f;
+                __instance.m_material.SetFloat("_FadeDistanceFactor", fadeDistanceFactor);
+            }
+            else
+            {
+                // Normal props
+                var lodTogglerFactor = TrueLodTogglerMod.ActiveConfig.PropLodDistance / 1000f;
+                __instance.m_lodRenderDistance *= lodTogglerFactor;
+                __instance.m_maxRenderDistance *= lodTogglerFactor;
+            }
+
         }
     }
     #endregion

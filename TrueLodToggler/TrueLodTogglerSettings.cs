@@ -65,7 +65,7 @@ namespace TrueLodToggler
                 new LodDropdownOption("4000m", 4000f),
                 new LodDropdownOption("5000m", 5000f),
                 new LodDropdownOption("10000m (Good luck!)", 10000f),
-                new LodDropdownOption("100000m (Goodbye!)", 10000f),
+                new LodDropdownOption("100000m (Goodbye!)", 100000f),
             };
 
             group.AddDropdown(
@@ -76,6 +76,43 @@ namespace TrueLodToggler
                 {
                     // Change config value and save config
                     config.PropLodDistance = lodDistanceOptions[sel].Value;
+                    Configuration<TrueLodTogglerConfiguration>.Save();
+                    LodUpdater.UpdateProps();
+                });
+
+            var decalFadeDistanceOptions = new LodDropdownOption[]
+            {
+                new LodDropdownOption("1m :P", 1f),
+                new LodDropdownOption("50m", 50f),
+                new LodDropdownOption("100m", 100f),
+                new LodDropdownOption("200m", 200f),
+                new LodDropdownOption("300m", 300f),
+                new LodDropdownOption("400m", 400f),
+                new LodDropdownOption("500m", 500f),
+                new LodDropdownOption("750m", 750f),
+                new LodDropdownOption("1000m (Game Default)", 1000f),
+                new LodDropdownOption("1250m", 1250f),
+                new LodDropdownOption("1500m", 1500f),
+                new LodDropdownOption("1750m", 1750f),
+                new LodDropdownOption("2000m", 2000f),
+                new LodDropdownOption("3000m", 3000f),
+                new LodDropdownOption("4000m", 4000f),
+                new LodDropdownOption("5000m", 5000f),
+                new LodDropdownOption("10000m", 10000f),
+                new LodDropdownOption("15000m", 15000f),
+                new LodDropdownOption("20000m", 20000f),
+                new LodDropdownOption("25000m", 25000f),
+                new LodDropdownOption("100000m (Goodbye!)", 100000f),
+            };
+
+            group.AddDropdown(
+                "Decal Prop Fade Distance",
+                LodDropdownOption.BuildLabels(decalFadeDistanceOptions),
+                LodDropdownOption.FindIndex(decalFadeDistanceOptions, config.DecalPropFadeDistance),
+                sel =>
+                {
+                    // Change config value and save config
+                    config.DecalPropFadeDistance = decalFadeDistanceOptions[sel].Value;
                     Configuration<TrueLodTogglerConfiguration>.Save();
                     LodUpdater.UpdateProps();
                 });

@@ -5,6 +5,7 @@
     {
         public float TreeLodDistance { get; set; } = 750f;
         public float PropLodDistance { get; set; } = 1000f;
+        public float DecalPropFadeDistance { get; set; } = 1000f;
         public float BuildingLodDistance { get; set; } = 1000f;
         public float NetworkLodDistance { get; set; } = 1000f;
 
@@ -15,6 +16,7 @@
         {
             TreeLodDistance = 2500f,
             PropLodDistance = 100000f,
+            DecalPropFadeDistance = 100000f,
             BuildingLodDistance = 100000f,
             NetworkLodDistance = 100000f,
         };
@@ -23,6 +25,7 @@
         {
             TreeLodDistance = 0f,
             PropLodDistance = 0f,
+            DecalPropFadeDistance = 0f,
             BuildingLodDistance = 0f,
             NetworkLodDistance = 0f,
         };
@@ -31,6 +34,7 @@
         {
             TreeLodDistance = 425f,
             PropLodDistance = 1000f,
+            DecalPropFadeDistance = 1000f,
             BuildingLodDistance = 1000f,
             NetworkLodDistance = 1000f,
         };
