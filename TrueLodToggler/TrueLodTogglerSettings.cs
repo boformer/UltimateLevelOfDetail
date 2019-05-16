@@ -1,5 +1,4 @@
 ﻿using ICities;
-using UnityEngine;
 
 namespace TrueLodToggler
 {
@@ -19,7 +18,10 @@ namespace TrueLodToggler
                 new LodDropdownOption("200m", 200f),
                 new LodDropdownOption("300m", 300f),
                 new LodDropdownOption("425m (Game Default)", 425f),
+                new LodDropdownOption("500m", 500f),
+                new LodDropdownOption("625m", 625f),
                 new LodDropdownOption("750m", 750f),
+                new LodDropdownOption("875m", 875f),
                 new LodDropdownOption("1000m", 1000f),
                 new LodDropdownOption("1250m", 1250f),
                 new LodDropdownOption("1500m", 1500f),
@@ -54,6 +56,7 @@ namespace TrueLodToggler
                 new LodDropdownOption("500m", 500f),
                 new LodDropdownOption("750m", 750f),
                 new LodDropdownOption("1000m (Game Default)", 1000f),
+                new LodDropdownOption("1125m", 1125f),
                 new LodDropdownOption("1250m", 1250f),
                 new LodDropdownOption("1500m", 1500f),
                 new LodDropdownOption("1750m", 1750f),
@@ -100,6 +103,19 @@ namespace TrueLodToggler
                     Configuration<TrueLodTogglerConfiguration>.Save();
                     LodUpdater.UpdateNetworks();
                 });
+
+            group.AddCheckbox("Disable on startup (press CTRL + SHIFT + [.] to enable)", config.VanillaModeOnStartup, sel =>
+            {
+                config.VanillaModeOnStartup = sel;
+                Configuration<TrueLodTogglerConfiguration>.Save();
+            });
+
+            group.AddCheckbox("Display current ULOD mode in Free Camera Button", config.FreeCameraButtonDisplay, sel =>
+            {
+                config.FreeCameraButtonDisplay = sel;
+                Configuration<TrueLodTogglerConfiguration>.Save();
+                TrueLodTogglerMod.UpdateFreeCameraButton();
+            });
 
             if (RenderManager.LevelOfDetailFactor < 1.4)
             {

@@ -3,11 +3,13 @@
     [ConfigurationPath("UltimateLod.xml")]
     public class TrueLodTogglerConfiguration
     {
-        public float TreeLodDistance { get; set; } = 1000f;
-        public float PropLodDistance { get; set; } = 1500f;
-        public float BuildingLodDistance { get; set; } = 1500f;
-        public float NetworkLodDistance { get; set; } = 1500f;
+        public float TreeLodDistance { get; set; } = 750f;
+        public float PropLodDistance { get; set; } = 1000f;
+        public float BuildingLodDistance { get; set; } = 1000f;
+        public float NetworkLodDistance { get; set; } = 1000f;
 
+        public bool VanillaModeOnStartup { get; set; } = false;
+        public bool FreeCameraButtonDisplay { get; set; } = true;
 
         public static TrueLodTogglerConfiguration MaxConfig = new TrueLodTogglerConfiguration
         {
@@ -23,6 +25,14 @@
             PropLodDistance = 0f,
             BuildingLodDistance = 0f,
             NetworkLodDistance = 0f,
+        };
+
+        public static TrueLodTogglerConfiguration VanillaConfig = new TrueLodTogglerConfiguration
+        {
+            TreeLodDistance = 425f,
+            PropLodDistance = 1000f,
+            BuildingLodDistance = 1000f,
+            NetworkLodDistance = 1000f,
         };
     }
 }

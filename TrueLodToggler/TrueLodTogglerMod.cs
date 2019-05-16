@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using ColossalFramework.UI;
 using Harmony;
 using ICities;
 using UnityEngine;
@@ -11,6 +12,7 @@ namespace TrueLodToggler
         Normal,
         Max,
         Lod,
+        Vanilla
     }
 
     public class TrueLodTogglerMod : IUserMod
@@ -33,14 +35,18 @@ namespace TrueLodToggler
                 {
                     return TrueLodTogglerConfiguration.LodConfig;
                 }
+                else if (Mode == LodTogglerMode.Vanilla)
+                {
+                    return TrueLodTogglerConfiguration.VanillaConfig;
+                }
                 else
                 {
-                    return _config;
+                    return Config;
                 }
             }
         }
 
-        private static TrueLodTogglerConfiguration _config;
+        public static TrueLodTogglerConfiguration Config;
 
         public static LodTogglerMode Mode = LodTogglerMode.Normal;
 
@@ -51,18 +57,74 @@ namespace TrueLodToggler
             _harmony = HarmonyInstance.Create(HarmonyId);
             _harmony.PatchAll(GetType().Assembly);
 
-            _config = Configuration<TrueLodTogglerConfiguration>.Load();
+            Config = Configuration<TrueLodTogglerConfiguration>.Load();
         }
 
         public void OnDisabled()
         {
-            _config = null;
+            Config = null;
 
             _harmony.UnpatchAll(HarmonyId);
             _harmony = null;
         }
 
         public void OnSettingsUI(UIHelperBase helper) => TrueLodTogglerSettings.OnSettingsUI(helper);
+
+        public static void UpdateFreeCameraButton()
+        {
+            var freeCameraButton = GameObject.Find("Freecamera").GetComponent<UIButton>();
+            if (freeCameraButton != null)
+            {
+                if (!Config.FreeCameraButtonDisplay)
+                {
+                    freeCameraButton.color = new Color32(255, 255, 255, 255);
+                    if (freeCameraButton.tooltip.Contains("ULOD"))
+                    {
+                        freeCameraButton.tooltip = null;
+                    }
+                }
+                else if (Mode == LodTogglerMode.Max)
+                {
+                    freeCameraButton.color = new Color32(255, 128, 128, 255);
+                    freeCameraButton.tooltip = "ULOD Screenshot \nCTRL + [.] to leave";
+                }
+                else if (Mode == LodTogglerMode.Lod)
+                {
+                    freeCameraButton.color = new Color32(128, 128, 255, 255);
+                    freeCameraButton.tooltip = "ULOD LOD\nCTRL + [.] to leave";
+                }
+                else if (Mode == LodTogglerMode.Vanilla)
+                {
+                    freeCameraButton.color = new Color32(255, 255, 128, 255);
+                    freeCameraButton.tooltip = "ULOD Vanilla\nCTRL + [.] to leave";
+                }
+                else
+                {
+                    freeCameraButton.color = new Color32(255, 255, 255, 255);
+                    freeCameraButton.tooltip = "Default ULOD\n" +
+                                               "CTRL + [.] for Screenshot Mode\n" +
+                                               "CTRL + SHIFT + [.] for Vanilla Mode\n" +
+                                               "CTRL + ALT + [.] for LOD Mode";
+                }
+            }
+        }
+    }
+
+    public class Loading : LoadingExtensionBase
+    {
+        public override void OnCreated(ILoading loading)
+        {
+            if (TrueLodTogglerMod.Config.VanillaModeOnStartup)
+            {
+                TrueLodTogglerMod.Mode = LodTogglerMode.Vanilla;
+            }
+        }
+
+        public override void OnLevelLoaded(LoadMode mode)
+        {
+            base.OnLevelLoaded(mode);
+            TrueLodTogglerMod.UpdateFreeCameraButton();
+        }
     }
 
     public class KeyInputThreading : ThreadingExtensionBase
@@ -84,6 +146,10 @@ namespace TrueLodToggler
                 {
                     TrueLodTogglerMod.Mode = LodTogglerMode.Lod;
                 }
+                else if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+                {
+                    TrueLodTogglerMod.Mode = LodTogglerMode.Vanilla;
+                }
                 else
                 {
                     TrueLodTogglerMod.Mode = LodTogglerMode.Max;
@@ -93,6 +159,9 @@ namespace TrueLodToggler
                 LodUpdater.UpdateProps();
                 LodUpdater.UpdateBuildings();
                 LodUpdater.UpdateNetworks();
+
+                TrueLodTogglerMod.UpdateFreeCameraButton();
+
                 _processed = true;
             }
             else
