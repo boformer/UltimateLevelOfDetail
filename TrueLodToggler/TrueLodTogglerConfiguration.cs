@@ -8,6 +8,8 @@
         public float DecalPropFadeDistance { get; set; } = 1000f;
         public float BuildingLodDistance { get; set; } = 1000f;
         public float NetworkLodDistance { get; set; } = 1000f;
+        public float VehicleLodDistance { get; set; } = 400f;
+        public float VehicleRenderDistance { get; set; } = 2000f;
 
         public bool VanillaModeOnStartup { get; set; } = false;
         public bool FreeCameraButtonDisplay { get; set; } = true;
@@ -19,6 +21,8 @@
             DecalPropFadeDistance = 100000f,
             BuildingLodDistance = 100000f,
             NetworkLodDistance = 100000f,
+            VehicleLodDistance = 100000f,
+            VehicleRenderDistance = 100000f
         };
 
         public static TrueLodTogglerConfiguration LodConfig = new TrueLodTogglerConfiguration
@@ -28,6 +32,8 @@
             DecalPropFadeDistance = 0f,
             BuildingLodDistance = 0f,
             NetworkLodDistance = 0f,
+            VehicleLodDistance = 0f,
+            VehicleRenderDistance = 2000f
         };
 
         public static TrueLodTogglerConfiguration VanillaConfig = new TrueLodTogglerConfiguration
@@ -37,6 +43,8 @@
             DecalPropFadeDistance = 1000f,
             BuildingLodDistance = 1000f,
             NetworkLodDistance = 1000f,
+            VehicleLodDistance = 400f,
+            VehicleRenderDistance = 2000f
         };
     }
 }

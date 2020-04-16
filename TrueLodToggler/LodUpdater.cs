@@ -28,6 +28,10 @@ namespace TrueLodToggler
             UpdateRenderGroups(LayerMask.NameToLayer("Road"));
         }
 
+        public static void UpdateVehicles() {
+            RefreshLevelOfDetail<VehicleInfo>();
+        }
+
         private static void RefreshLevelOfDetail<T>() where T : PrefabInfo
         {
             var prefabCount = (uint)PrefabCollection<T>.LoadedCount();

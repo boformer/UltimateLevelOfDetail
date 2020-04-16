@@ -141,6 +141,75 @@ namespace TrueLodToggler
                     LodUpdater.UpdateNetworks();
                 });
 
+            var vehicleLodDistanceOptions = new LodDropdownOption[]
+            {
+                new LodDropdownOption("1m :P", 1f),
+                new LodDropdownOption("50m", 50f),
+                new LodDropdownOption("100m", 100f),
+                new LodDropdownOption("200m", 200f),
+                new LodDropdownOption("300m", 300f),
+                new LodDropdownOption("400m (Game Default)", 400f),
+                new LodDropdownOption("500m", 500f),
+                new LodDropdownOption("625m", 625f),
+                new LodDropdownOption("750m", 750f),
+                new LodDropdownOption("875m", 875f),
+                new LodDropdownOption("1000m", 1000f),
+                new LodDropdownOption("1250m", 1250f),
+                new LodDropdownOption("1500m", 1500f),
+                new LodDropdownOption("2000m", 2000f),
+                new LodDropdownOption("3000m", 3000f),
+                new LodDropdownOption("4000m", 4000f),
+                new LodDropdownOption("5000m", 5000f),
+                new LodDropdownOption("10000m (Good luck!)", 10000f),
+                new LodDropdownOption("100000m (Goodbye!)", 10000f),
+            };
+
+            group.AddDropdown(
+                "Vehicle LOD Distance",
+                LodDropdownOption.BuildLabels(vehicleLodDistanceOptions),
+                LodDropdownOption.FindIndex(vehicleLodDistanceOptions, config.VehicleLodDistance),
+                sel => {
+                    // Change config value and save config
+                    config.VehicleLodDistance = vehicleLodDistanceOptions[sel].Value;
+                    Configuration<TrueLodTogglerConfiguration>.Save();
+                    LodUpdater.UpdateVehicles();
+                });
+
+            var vehicleRenderDistanceOptions = new LodDropdownOption[]
+            {
+                new LodDropdownOption("1m :P", 1f),
+                new LodDropdownOption("50m", 50f),
+                new LodDropdownOption("100m", 100f),
+                new LodDropdownOption("250m", 250f),
+                new LodDropdownOption("500m", 500f),
+                new LodDropdownOption("750m", 750f),
+                new LodDropdownOption("1000m", 1000f),
+                new LodDropdownOption("1250m", 1250f),
+                new LodDropdownOption("1500m", 1500f),
+                new LodDropdownOption("2000m (Game Default)", 2000f),
+                new LodDropdownOption("2500m", 2500f),
+                new LodDropdownOption("3000m", 3000f),
+                new LodDropdownOption("4000m", 4000f),
+                new LodDropdownOption("5000m", 5000f),
+                new LodDropdownOption("6000m", 6000f),
+                new LodDropdownOption("10000m", 10000f),
+                new LodDropdownOption("15000m", 15000f),
+                new LodDropdownOption("20000m", 20000f),
+                new LodDropdownOption("25000m (Good luck!)", 25000f),
+                new LodDropdownOption("100000m (Goodbye!)", 10000f),
+            };
+
+            group.AddDropdown(
+                "Vehicle Render Distance",
+                LodDropdownOption.BuildLabels(vehicleRenderDistanceOptions),
+                LodDropdownOption.FindIndex(vehicleRenderDistanceOptions, config.VehicleRenderDistance),
+                sel => {
+                    // Change config value and save config
+                    config.VehicleRenderDistance = vehicleRenderDistanceOptions[sel].Value;
+                    Configuration<TrueLodTogglerConfiguration>.Save();
+                    LodUpdater.UpdateVehicles();
+                });
+
             group.AddCheckbox("Disable on startup (press CTRL + SHIFT + [.] to enable)", config.VanillaModeOnStartup, sel =>
             {
                 config.VanillaModeOnStartup = sel;

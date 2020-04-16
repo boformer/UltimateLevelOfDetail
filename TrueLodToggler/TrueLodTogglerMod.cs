@@ -159,6 +159,7 @@ namespace TrueLodToggler
                 LodUpdater.UpdateProps();
                 LodUpdater.UpdateBuildings();
                 LodUpdater.UpdateNetworks();
+                LodUpdater.UpdateVehicles();
 
                 TrueLodTogglerMod.UpdateFreeCameraButton();
 
@@ -375,6 +376,25 @@ namespace TrueLodToggler
                 }
             }
             __instance.m_maxPropDistance *= lodTogglerFactor;
+        }
+    }
+    #endregion
+    
+    #region Vehicles
+    [HarmonyPatch(typeof(VehicleInfo), "RefreshLevelOfDetail", new Type[0])]
+    public static class VehicleInfoRefreshLevelOfDetailPatch {
+        public static void Postfix(VehicleInfo __instance) {
+            UnityEngine.Debug.Log($"{__instance.name} {TrueLodTogglerMod.ActiveConfig.VehicleLodDistance} {TrueLodTogglerMod.ActiveConfig.VehicleRenderDistance}");
+            __instance.m_lodRenderDistance *= (TrueLodTogglerMod.ActiveConfig.VehicleLodDistance / 400f);
+            __instance.m_maxRenderDistance *= (TrueLodTogglerMod.ActiveConfig.VehicleRenderDistance / 2000f);
+        }
+    }
+
+    [HarmonyPatch(typeof(VehicleInfoSub), "RefreshLevelOfDetail", new Type[0])]
+    public static class VehicleInfoSubRefreshLevelOfDetailPatch {
+        public static void Postfix(VehicleInfoSub __instance) {
+            __instance.m_lodRenderDistance *= (TrueLodTogglerMod.ActiveConfig.VehicleLodDistance / 400f);
+            __instance.m_maxRenderDistance *= (TrueLodTogglerMod.ActiveConfig.VehicleRenderDistance / 2000f);
         }
     }
     #endregion
