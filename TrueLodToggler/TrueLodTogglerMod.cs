@@ -124,6 +124,7 @@ namespace TrueLodToggler
         {
             base.OnLevelLoaded(mode);
             TrueLodTogglerMod.UpdateFreeCameraButton();
+            LodUpdater.UpdateShadowDistance();
         }
     }
 
@@ -160,6 +161,7 @@ namespace TrueLodToggler
                 LodUpdater.UpdateBuildings();
                 LodUpdater.UpdateNetworks();
                 LodUpdater.UpdateVehicles();
+                LodUpdater.UpdateShadowDistance();
 
                 TrueLodTogglerMod.UpdateFreeCameraButton();
 
@@ -182,6 +184,27 @@ namespace TrueLodToggler
         {
             if (layer == TreeManager.instance.m_treeLayer)
             {
+                maxInstanceDistance = Mathf.Max(maxInstanceDistance, TrueLodTogglerMod.ActiveConfig.TreeLodDistance);
+            }
+        }
+    }
+
+    // Unlimited Trees
+    [HarmonyPatch]
+    public static class LimitTreeManagerPopulateGroupDataPatch {
+        public static bool Prepare() {
+            try {
+                return TargetMethod() != null;
+            } catch {
+                return false;
+            }
+        }
+
+        public static MethodBase TargetMethod() => Type.GetType("TreeUnlimiter.Detours.LimitTreeManager, TreeUnlimiter")
+            ?.GetMethod("PopulateGroupData", BindingFlags.NonPublic | BindingFlags.Static);
+
+        public static void Postfix(int layer, ref float maxInstanceDistance) {
+            if (layer == TreeManager.instance.m_treeLayer) {
                 maxInstanceDistance = Mathf.Max(maxInstanceDistance, TrueLodTogglerMod.ActiveConfig.TreeLodDistance);
             }
         }

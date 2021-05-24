@@ -1,4 +1,5 @@
 ﻿using ICities;
+using UnityEngine;
 
 namespace TrueLodToggler
 {
@@ -7,6 +8,10 @@ namespace TrueLodToggler
         public static void OnSettingsUI(UIHelperBase helper)
         {
             var config = Configuration<TrueLodTogglerConfiguration>.Load();
+
+            if (RenderManager.LevelOfDetailFactor < 1.4) {
+                helper.AddGroup("Warning: Set your 'Level Of Detail' graphics option to 'Very High' for good results!");
+            }
 
             var group = helper.AddGroup("Ultimate Level Of Detail");
 
@@ -30,7 +35,7 @@ namespace TrueLodToggler
                 new LodDropdownOption("4000m", 4000f),
                 new LodDropdownOption("5000m", 5000f),
                 new LodDropdownOption("10000m (Good luck!)", 10000f),
-                new LodDropdownOption("100000m (Goodbye!)", 10000f),
+                new LodDropdownOption("100000m (Goodbye!)", 100000f),
             };
 
             group.AddDropdown(
@@ -161,7 +166,7 @@ namespace TrueLodToggler
                 new LodDropdownOption("4000m", 4000f),
                 new LodDropdownOption("5000m", 5000f),
                 new LodDropdownOption("10000m (Good luck!)", 10000f),
-                new LodDropdownOption("100000m (Goodbye!)", 10000f),
+                new LodDropdownOption("100000m (Goodbye!)", 100000f),
             };
 
             group.AddDropdown(
@@ -196,7 +201,7 @@ namespace TrueLodToggler
                 new LodDropdownOption("15000m", 15000f),
                 new LodDropdownOption("20000m", 20000f),
                 new LodDropdownOption("25000m (Good luck!)", 25000f),
-                new LodDropdownOption("100000m (Goodbye!)", 10000f),
+                new LodDropdownOption("100000m (Goodbye!)", 100000f),
             };
 
             group.AddDropdown(
@@ -208,6 +213,41 @@ namespace TrueLodToggler
                     config.VehicleRenderDistance = vehicleRenderDistanceOptions[sel].Value;
                     Configuration<TrueLodTogglerConfiguration>.Save();
                     LodUpdater.UpdateVehicles();
+                });
+
+            var shadowDistanceOptions = new LodDropdownOption[]
+            {
+                new LodDropdownOption("1m :P", 1f),
+                new LodDropdownOption("50m", 50f),
+                new LodDropdownOption("100m", 100f),
+                new LodDropdownOption("250m", 250f),
+                new LodDropdownOption("500m", 500f),
+                new LodDropdownOption("750m", 750f),
+                new LodDropdownOption("1000m", 1000f),
+                new LodDropdownOption("1250m", 1250f),
+                new LodDropdownOption("1500m", 1500f),
+                new LodDropdownOption("2000m", 2000f),
+                new LodDropdownOption("2500m", 2500f),
+                new LodDropdownOption("3000m", 3000f),
+                new LodDropdownOption("4000m (Game Default)", 4000f),
+                new LodDropdownOption("5000m", 5000f),
+                new LodDropdownOption("6000m", 6000f),
+                new LodDropdownOption("10000m", 10000f),
+                new LodDropdownOption("15000m", 15000f),
+                new LodDropdownOption("20000m", 20000f),
+                new LodDropdownOption("25000m (Good luck!)", 25000f),
+                new LodDropdownOption("100000m (Goodbye!)", 100000f),
+            };
+
+            group.AddDropdown(
+                "Shadow Distance",
+                LodDropdownOption.BuildLabels(shadowDistanceOptions),
+                LodDropdownOption.FindIndex(shadowDistanceOptions, config.ShadowDistance),
+                sel => {
+                    // Change config value and save config
+                    config.ShadowDistance = shadowDistanceOptions[sel].Value;
+                    Configuration<TrueLodTogglerConfiguration>.Save();
+                    LodUpdater.UpdateShadowDistance();
                 });
 
             group.AddCheckbox("Disable on startup (press CTRL + SHIFT + [.] to enable)", config.VanillaModeOnStartup, sel =>
@@ -222,11 +262,6 @@ namespace TrueLodToggler
                 Configuration<TrueLodTogglerConfiguration>.Save();
                 TrueLodTogglerMod.UpdateFreeCameraButton();
             });
-
-            if (RenderManager.LevelOfDetailFactor < 1.4)
-            {
-                helper.AddGroup("Warning: Set your 'Level Of Detail' graphics option to 'Very High' for good results!");
-            }
         }
     }
 

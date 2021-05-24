@@ -41,7 +41,7 @@ namespace TrueLodToggler
                 prefab?.RefreshLevelOfDetail();
             }
 
-            if (ToolsModifierControl.toolController.m_editPrefabInfo is T)
+            if (ToolsModifierControl.toolController != null && ToolsModifierControl.toolController.m_editPrefabInfo is T)
             {
                 ToolsModifierControl.toolController.m_editPrefabInfo.RefreshLevelOfDetail();
             }
@@ -58,6 +58,13 @@ namespace TrueLodToggler
 
                 renderGroup.SetLayerDataDirty(layerIndex);
                 renderGroup.UpdateMeshData();
+            }
+        }
+
+        public static void UpdateShadowDistance() {
+            var cameraController = UnityEngine.Object.FindObjectOfType<CameraController>();
+            if (cameraController != null) {
+                cameraController.m_maxShadowDistance = TrueLodTogglerMod.ActiveConfig.ShadowDistance;
             }
         }
     }
